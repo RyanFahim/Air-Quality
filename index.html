@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Live Air Quality Data</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      padding: 30px 10px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 30px;
+      font-size: 2rem;
+    }
+
+    #data-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .data-box {
+      background: white;
+      padding: 20px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 10px;
+    }
+
+    .data-label {
+      font-weight: bold;
+      color: #333;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .data-value {
+      font-size: 22px;
+      color: #0077cc;
+    }
+
+    #last-updated {
+      margin-top: 30px;
+      font-size: 16px;
+      color: #666;
+    }
+
+    @media (max-width: 600px) {
+      .data-box {
+        padding: 15px;
+      }
+
+      .data-label {
+        font-size: 16px;
+      }
+
+      .data-value {
+        font-size: 20px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>BCSIR Live Air Quality Data</h1>
+
+  <div id="data-container">
+    <div class="data-box"><span class="data-label">PM 2.5:</span> <span id="field1" class="data-value">Loading...</span></div>
+    <div class="data-box"><span class="data-label">PM 10:</span> <span id="field2" class="data-value">Loading...</span></div>
+    <div class="data-box"><span class="data-label">Humidity:</span> <span id="field3" class="data-value">Loading...</span></div>
+    <div class="data-box"><span class="data-label">Temperature:</span> <span id="field4" class="data-value">Loading...</span></div>
+    <div class="data-box"><span class="data-label">MQ-7 Analog Value:</span> <span id="field5" class="data-value">Loading...</span></div>
+    <div class="data-box"><span class="data-label">MQ-135 Analog Value:</span> <span id="field6" class="data-value">Loading...</span></div>
+    <div class="data-box"><span class="data-label">MQ-136 Analog Value:</span> <span id="field7" class="data-value">Loading...</span></div>
+  </div>
+
+  <div id="last-updated">Last updated: Loading...</div>
+
+  <script>
+    const channelID = '2572865';
+    const apiKey = '26VL9W12T00DUE8C';
+    const apiUrl = `https://api.thingspeak.com/channels/${channelID}/feeds.json?api_key=${apiKey}&results=1`;
+
+    function fetchData() {
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+          const latestFeed = data.feeds[0];
+          for (let i = 1; i <= 7; i++) {
+            const value = latestFeed[`field${i}`] || 'N/A';
+            document.getElementById(`field${i}`).textContent = value;
+          }
+
+          const updatedTime = new Date(latestFeed.created_at);
+          const localTimeString = updatedTime.toLocaleString();
+          document.getElementById("last-updated").textContent = `Last updated: ${localTimeString}`;
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+          for (let i = 1; i <= 7; i++) {
+            document.getElementById(`field${i}`).textContent = 'Error';
+          }
+          document.getElementById("last-updated").textContent = 'Failed to update data.';
+        });
+    }
+
+    // Fetch on load
+    fetchData();
+
+    // Refresh every 15 seconds
+    //setInterval(fetchData, 15000);
+  </script>
+
+</body>
+</html>
