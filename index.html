@@ -156,9 +156,11 @@
       font-weight: 600;
       padding: 8px 20px;
       border-radius: 20px;
-      color: white;
       margin-bottom: 15px;
       transition: var(--transition);
+      color: #2c3e50 !important; /* Changed from white to dark blue */
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border: 2px solid rgba(255,255,255,0.3);
     }
 
     .aqi-scale {
@@ -188,6 +190,10 @@
       font-size: 12px;
       color: #777;
       margin-top: 5px;
+    }
+
+    .scale-labels span {
+      font-weight: bold;
     }
 
     /* Data Cards */
@@ -281,6 +287,7 @@
       font-size: 14px;
       color: #777;
       margin-bottom: 8px;
+      font-weight: bold; /* Made pollutant names bold */
     }
 
     .pollutant-value {
@@ -335,6 +342,12 @@
       .pollutants-grid {
         grid-template-columns: 1fr;
       }
+      
+      .scale-labels {
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+      }
     }
   </style>
 </head>
@@ -371,28 +384,6 @@
           <span>151-200 Unhealthy</span>
           <span>201-300 Very Unhealthy</span>
           <span>300+ Hazardous</span>
-        </div>
-      </div>
-
-      <!-- Weather Metrics Section -->
-      <div class="section-card">
-        <div class="card-header">
-          <div class="card-title">
-            <i class="fas fa-cloud-sun card-icon"></i>
-            <span>Weather Metrics</span>
-          </div>
-        </div>
-        <div class="pollutants-grid">
-          <div class="pollutant-item">
-            <div class="pollutant-name">Temperature</div>
-            <div class="pollutant-value" id="field1"><span class="loading"></span></div>
-            <div class="data-unit">°C</div>
-          </div>
-          <div class="pollutant-item">
-            <div class="pollutant-name">Humidity</div>
-            <div class="pollutant-value" id="field2"><span class="loading"></span></div>
-            <div class="data-unit">%</div>
-          </div>
         </div>
       </div>
 
@@ -441,6 +432,28 @@
             <div class="pollutant-name">Nitrogen Oxides (NOx)</div>
             <div class="pollutant-value" id="field5"><span class="loading"></span></div>
             <div class="data-unit">ppm</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Weather Metrics Section -->
+      <div class="section-card">
+        <div class="card-header">
+          <div class="card-title">
+            <i class="fas fa-cloud-sun card-icon"></i>
+            <span>Weather Metrics</span>
+          </div>
+        </div>
+        <div class="pollutants-grid">
+          <div class="pollutant-item">
+            <div class="pollutant-name">Temperature</div>
+            <div class="pollutant-value" id="field1"><span class="loading"></span></div>
+            <div class="data-unit">°C</div>
+          </div>
+          <div class="pollutant-item">
+            <div class="pollutant-name">Humidity</div>
+            <div class="pollutant-value" id="field2"><span class="loading"></span></div>
+            <div class="data-unit">%</div>
           </div>
         </div>
       </div>
